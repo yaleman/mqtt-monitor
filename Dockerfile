@@ -15,9 +15,9 @@ RUN apt-get update && apt-get -y install dumb-init && apt-get clean
 RUN mkdir -p /home/mqtt/.config/
 RUN chown mqtt /home/mqtt -R
 
-RUN mkdir -p build/mqtt
+# RUN mkdir -p build/mqtt
 
-WORKDIR /build
+WORKDIR /app
 
 COPY mqtt_monitor mqtt_monitor
 COPY poetry.lock .
@@ -25,12 +25,12 @@ COPY pyproject.toml .
 
 # RUN python -m pip install poetry
 
-RUN chown mqtt /build -R
-WORKDIR /build/
+RUN chown mqtt /app -R
+WORKDIR /app/
 USER mqtt
 
 RUN python -m pip install --upgrade --no-warn-script-location pip
-RUN python -m pip install --no-warn-script-location /build
+RUN python -m pip install --no-warn-script-location /app
 
 ENTRYPOINT ["/usr/bin/dumb-init", "--"]
 CMD python -m mqtt_monitor

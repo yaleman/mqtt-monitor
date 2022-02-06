@@ -73,6 +73,8 @@ def cli(
 
     if config_filepath.exists():
         config = ConfigFile.parse_file(config_filepath)
+    elif Path("mqtt-monitor.json").exists():
+        config = ConfigFile.parse_file("mqtt-monitor.json")
     else:
         config = ConfigFile(hostname=hostname, topic=topic, port=port)
 
