@@ -1,0 +1,22 @@
+---
+version: '3.8'
+
+services:
+  watchtower:
+    # env_file: .env
+    environment:
+      - WATCHTOWER_LABEL_ENABLE=1
+      - WATCHTOWER_DEBUG=1
+      - NO_COLOR=1
+    image: containrrr/watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /root/.docker/config.json:/config.json
+    command: --interval 3600
+  mqtt:
+    build: .
+    env_file: .env
+    image: ghcr.io/yaleman/mqtt_monitor:latest
+    labels:
+      com.centurylinklabs.watchtower.enable: true
+    restart: always

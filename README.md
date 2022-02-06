@@ -1,14 +1,6 @@
 # mqtt-monitor
 
-[![PyPI](https://img.shields.io/pypi/v/mqtt-monitor.svg)](https://pypi.org/project/mqtt-monitor/)
-
 MQTT Monitoring thing
-
-## Installation
-
-Install this library using `pip`:
-
-    $ python -m pip install mqtt-monitor
 
 ## Usage
 
@@ -18,6 +10,7 @@ Usage instructions go here.
 
 To contribute to this library, first checkout the code. Then create a new virtual environment:
 
-    cd mqtt-monitor
+    cd mqtt_monitor
     poetry install
-    source venv/bin/activate
+    poetry run python -m mqtt_monitor <hostname>
+
