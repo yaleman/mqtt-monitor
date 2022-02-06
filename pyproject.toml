@@ -9,12 +9,14 @@ license = "MIT"
 python = "^3.9"
 paho-mqtt = "^1.6.1"
 click = "^8.0.3"
+pydantic = "^1.9.0"
 
 [tool.poetry.dev-dependencies]
 pylint = "^2.12.2"
 mypy = "^0.931"
 black = "^22.1.0"
 pytest = "^7.0.0"
+pylint-pydantic = "^0.1.4"
 
 [tool.poetry.scripts]
 mqtt-monitor = "mqtt_monitor:cli"

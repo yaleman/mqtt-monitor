@@ -15,8 +15,9 @@ services:
     command: --interval 3600
   mqtt:
     build: .
-    env_file: .env
     image: ghcr.io/yaleman/mqtt_monitor:latest
     labels:
       com.centurylinklabs.watchtower.enable: true
+    volumes:
+      - ./mqtt-monitor.json:/home/mqtt/.config/mqtt-monitor.json
     restart: always

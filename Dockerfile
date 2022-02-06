@@ -6,12 +6,13 @@ FROM python:3.10-slim
 ########################################
 # ubuntu mode
 RUN useradd mqtt
+RUN apt-get update && apt-get -y install dumb-init && apt-get clean
 
 # alpine mode
 # RUN apk add --no-cache curl
 # RUN addgroup -S appgroup && adduser -S mqtt -G appgroup
 
-RUN mkdir -p /home/mqtt/
+RUN mkdir -p /home/mqtt/.config/
 RUN chown mqtt /home/mqtt -R
 
 RUN mkdir -p build/mqtt
@@ -31,5 +32,5 @@ USER mqtt
 RUN python -m pip install --upgrade --no-warn-script-location pip
 RUN python -m pip install --no-warn-script-location /build
 
-
-CMD python -m mqtt_monitor ${MQTT_HOSTNAME}
+ENTRYPOINT ["/usr/bin/dumb-init", "--"]
+CMD python -m mqtt_monitor
