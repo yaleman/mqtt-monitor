@@ -15,7 +15,7 @@ services:
     command: --interval 3600
   mqtt:
     build: .
-    image: ghcr.io/yaleman/mqtt_monitor:latest
+    image: ghcr.io/yaleman/mqtt-monitor:latest
     labels:
       com.centurylinklabs.watchtower.enable: true
     volumes:

@@ -25,15 +25,17 @@ Or use docker one-off:
 ```
 docker run --rm --name mqtt_monitor \
     -v "$(pwd)/mqtt-monitor.json:/app/mqtt-monitor.json" \
-    ghcr.io/yaleman/mqtt_monitor:latest
+    ghcr.io/yaleman/mqtt-monitor:latest
 ```
 
 Keep it running in the background:
 
 ```
-docker run -d --name mqtt_monitor \
+docker run -d \
+    --name mqtt_monitor \
+    --restart always \
     -v "$(pwd)/mqtt-monitor.json:/app/mqtt-monitor.json" \
-    ghcr.io/yaleman/mqtt_monitor:latest
+    ghcr.io/yaleman/mqtt-monitor:latest
 ```
 
 ## Development

@@ -17,15 +17,26 @@ class ConfigFile(BaseModel):
     topic: str = "#"
     keepalives: int = 60
 
+CONNECT_RC = {
+    0: "Connection successful",
+    1: "Connection refused - incorrect protocol version",
+    2: "Connection refused - invalid client identifier",
+    3: "Connection refused - server unavailable",
+    4: "Connection refused - bad username or password",
+    5: "Connection refused - not authorised",
+    # 6-255: Currently unused.
+}
+
 
 
 # The callback for when the client receives a CONNACK response from the server.
 def on_connect(client, userdata, flags, result_code): # pylint: disable=unused-argument
     """ on_connect  method """
-    print(json.dumps({
+    msg = json.dumps({
         "action" : "connected",
-        "message" : f"result code {result_code}",
-    }), file=sys.stderr)
+        "message" : CONNECT_RC.get(result_code,f"Unknown result code: {result_code}"),
+    })
+    print(msg, file=sys.stderr)
 
     # Subscribing in on_connect() means that if we lose the connection and
     # reconnect then subscriptions will be renewed.
