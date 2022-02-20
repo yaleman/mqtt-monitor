@@ -7,7 +7,7 @@ import time
 from pathlib import Path
 
 import click
-import paho.mqtt.client as mqtt
+import paho.mqtt.client as mqtt # type: ignore
 from pydantic import BaseModel
 
 class ConfigFile(BaseModel):
