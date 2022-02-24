@@ -2,19 +2,29 @@
 
 import asyncio.exceptions
 import json
+from os import PathLike
+from pathlib import Path
 import sys
 import time
-from pathlib import Path
+from typing import Dict, List, Optional, TypedDict, Union
 
 import click
 import paho.mqtt.client as mqtt # type: ignore
 from pydantic import BaseModel
 
+class UserData(TypedDict):
+    """ userdata typing """
+    hostname: str
+    port: str
+    topics: List[str]
+    keepalives: int
+
+
 class ConfigFile(BaseModel):
     """ mqtt-monitor configuration model """
     hostname: str
     port: int = 1883
-    topic: str = "#"
+    topics: List[str] = []
     keepalives: int = 60
 
 CONNECT_RC = {
@@ -30,7 +40,12 @@ CONNECT_RC = {
 
 
 # The callback for when the client receives a CONNACK response from the server.
-def on_connect(client, userdata, flags, result_code): # pylint: disable=unused-argument
+def on_connect(
+    client: mqtt.Client,
+    userdata: UserData,
+    _: Dict[str, Union[int, str]],
+    result_code: int,
+    ) -> None:
     """ on_connect  method """
     msg = json.dumps({
         "action" : "connected",
@@ -40,10 +55,16 @@ def on_connect(client, userdata, flags, result_code): # pylint: disable=unused-a
 
     # Subscribing in on_connect() means that if we lose the connection and
     # reconnect then subscriptions will be renewed.
-    client.subscribe(topic=userdata["topic"])
+    for topic in userdata["topics"]:
+        client.subscribe(topic=topic)
 
 # The callback for when a PUBLISH message is received from the server.
-def on_message(client: mqtt.Client, userdata, msg): # pylint: disable=unused-argument
+# pylint: disable=unused-argument
+def on_message(
+    client: mqtt.Client,
+    userdata: UserData,
+    msg: mqtt.MQTTMessage,
+    ) -> None: # pylint: disable=unused-argument
     """ message handler """
     try:
         message = json.loads(msg.payload)
@@ -57,7 +78,7 @@ def on_message(client: mqtt.Client, userdata, msg): # pylint: disable=unused-arg
         "topic" : msg.topic,
         "msg" : message,
     }
-    print(json.dumps(data, ensure_ascii=False), file=sys.stderr)
+    print(json.dumps(data, default=str, ensure_ascii=False), file=sys.stderr)
 
 @click.command()
 @click.option("--config-file", type=Path, default="~/.config/mqtt-monitor.json")
@@ -69,15 +90,16 @@ def on_message(client: mqtt.Client, userdata, msg): # pylint: disable=unused-arg
     help="Port to connect to.")
 @click.option(
     "--topic", "-t",
-    default='#',
-    help="Default is '#' which shows everything but system messages",
+    default=None,
+    multiple=True,
+    help="Default is '#' which shows everything but system messages, can specify multiple times.",
     )
 def cli(
-    config_file=Path("~/.config/mqtt-monitor.json"),
-    hostname: str=None,
-    topic: str="#",
+    config_file: Path=Path("~/.config/mqtt-monitor.json"),
+    hostname: Optional[str]=None,
+    topic: Optional[List[str]]=None,
     port: int=1883,
-    ):
+    ) -> None:
     """ MQTT Monitor """
 
     config_filepath = Path(config_file).expanduser().resolve()
@@ -87,13 +109,13 @@ def cli(
     elif Path("mqtt-monitor.json").exists():
         config = ConfigFile.parse_file("mqtt-monitor.json")
     else:
-        config = ConfigFile(hostname=hostname, topic=topic, port=port)
+        config = ConfigFile(hostname=hostname, topics=topic, port=port)
 
     print(json.dumps({
         "action" : "startup",
         "hostname" : config.hostname,
         "port" : config.port,
-        "topic" : config.topic,
+        "topics" : config.topics,
     }), file=sys.stderr)
 
     client = mqtt.Client()

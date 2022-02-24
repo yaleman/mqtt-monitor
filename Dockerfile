@@ -33,4 +33,4 @@ RUN python -m pip install --upgrade --no-warn-script-location pip
 RUN python -m pip install --no-warn-script-location /app
 
 ENTRYPOINT ["/usr/bin/dumb-init", "--"]
-CMD python -m mqtt_monitor
+CMD python -m mqtt_monitor --config-file /app/mqtt-monitor.json
