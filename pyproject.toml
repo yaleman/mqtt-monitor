@@ -15,7 +15,7 @@ pydantic = "^1.9.0"
 pylint = "^2.12.2"
 mypy = "^0.941"
 black = "^22.1.0"
-pytest = "^7.1.0"
+pytest = "^7.1.1"
 pylint-pydantic = "^0.1.4"
 
 [tool.poetry.scripts]
