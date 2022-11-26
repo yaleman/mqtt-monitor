@@ -18,3 +18,4 @@ dist/
 .env
 build/
 mqtt-monitor.json
+poetry.lock
