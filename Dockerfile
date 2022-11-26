@@ -20,7 +20,6 @@ RUN chown mqtt /home/mqtt -R
 WORKDIR /app
 
 COPY mqtt_monitor mqtt_monitor
-COPY poetry.lock .
 COPY pyproject.toml .
 
 # RUN python -m pip install poetry
