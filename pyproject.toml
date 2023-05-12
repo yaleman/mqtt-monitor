@@ -29,6 +29,9 @@ max-line-length = 200
 extension-pkg-whitelist = "pydantic"
 load-plugins = "pylint_pydantic"
 
+[tool.mypy]
+plugins = "pydantic.mypy"
+
 [build-system]
 requires = [
     "poetry-core>=1.0.0",
