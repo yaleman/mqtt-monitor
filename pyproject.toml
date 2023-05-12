@@ -2,7 +2,9 @@
 name = "mqtt-monitor"
 version = "0.0.2"
 description = "MQTT Monitoring thing"
-authors = ["James Hogkinson <james@terminaloutcomes.com>"]
+authors = [
+    "James Hogkinson <james@terminaloutcomes.com>",
+]
 license = "MIT"
 
 [tool.poetry.dependencies]
@@ -22,13 +24,22 @@ pylint-pydantic = "^0.1.4"
 mqtt-monitor = "mqtt_monitor:cli"
 
 [tool.pylint.MASTER]
-disable="W0511"
-max-line-length=200
-
-# https://github.com/samuelcolvin/pydantic/issues/1961#issuecomment-759522422
-extension-pkg-whitelist="pydantic"
-load-plugins="pylint_pydantic"
+disable = "W0511"
+max-line-length = 200
+extension-pkg-whitelist = "pydantic"
+load-plugins = "pylint_pydantic"
 
 [build-system]
-requires = ["poetry-core>=1.0.0"]
+requires = [
+    "poetry-core>=1.0.0",
+]
 build-backend = "poetry.core.masonry.api"
+
+[project]
+name = "mqtt-monitor"
+description = "MQTT Monitoring thing"
+license = "MIT"
+version = "0.0.2"
+authors = [
+    { name = "James Hogkinson", email = "james@terminaloutcomes.com" },
+]
